@@ -1,0 +1,105 @@
+/* Custom Styling for Dashboard */
+
+/* Navbar styling */
+.navbar-custom {
+  background-color: #2C3E50; /* Darker Navbar */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-custom .navbar-brand {
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.navbar-custom .navbar-toggler {
+  border: none;
+}
+
+.navbar-custom .navbar-toggler-icon {
+  background-color: white;
+}
+
+.navbar-custom .btn-logout {
+  background-color: #E74C3C;
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 8px 20px;
+  margin-top: 5px;
+}
+
+.navbar-custom .btn-logout:hover {
+  background-color: #C0392B;
+}
+
+/* Offcanvas Sidebar styling */
+.sidebar-custom {
+  background-color: #34495E;
+  color: #ECF0F1;
+}
+
+/* Custom Offcanvas Sidebar Background */
+.offcanvas-start {
+    background-color: #34414e; /* You can change this to any color you prefer */
+  }
+  
+
+.offcanvas-header {
+  background-color: #5b738b;
+  color: #ECF0F1;
+  border-bottom: 2px solid #7F8C8D;
+}
+
+.offcanvas-body a.nav-link {
+  color: #ECF0F1;
+  padding: 12px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.offcanvas-body a.nav-link:hover {
+  background-color: #7F8C8D;
+  color: #fff;
+}
+
+/* Main Content Styling */
+.dashboard-content {
+  padding-top: 80px; /* Allow for navbar height */
+  background-color: #ECF0F1;
+  min-height: calc(100vh - 80px);
+  transition: padding-top 0.3s ease-in-out;
+}
+
+/* Make sure the logout button aligns properly in smaller screens */
+@media (max-width: 767px) {
+  .navbar-custom .btn-logout {
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .sidebar-custom .offcanvas-body a.nav-link {
+    font-size: 1.2rem;
+  }
+}
+
+/* Adjustments for larger screens */
+@media (min-width: 992px) {
+  .navbar-custom .btn-logout {
+    font-size: 1.2rem;
+    margin-left: 20px;
+  }
+}
+
+
+.active-link {
+    font-weight: bold;
+    color: #007bff !important; /* Bootstrap primary color */
+    background-color: rgba(0, 123, 255, 0.1); /* Light highlight */
+    border-left: 4px solid #007bff; /* Visual indicator */
+    padding-left: 10px;
+  }
+  
+  

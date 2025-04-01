@@ -1,0 +1,64 @@
+/* Global Styling */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Task List Container */
+  .tasks-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  /* Card Styling */
+  .card {
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Task Item Hover Effects */
+  .task-item:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transform: translateY(-5px);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Button Hover Effects */
+  button:hover {
+    background-color: #007bff !important;
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+  }
+  
+  button:active {
+    transform: translateY(1px);
+    transition: all 0.1s ease;
+  }
+  
+  /* Task Title and Description */
+  h5.text-truncate {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #6c757d;
+    font-weight: 400;
+  }
+  
+  small {
+    font-size: 0.9rem;
+    color: #495057;
+  }
+  
+  /* Spinner Centering */
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  

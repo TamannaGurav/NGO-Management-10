@@ -1,0 +1,117 @@
+/* import 'bootstrap/dist/css/bootstrap.min.css'; */
+
+/* Global Container Styling */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5; /* Soft light gray background */
+  }
+  
+  /* Login Box Styling */
+  .login-box {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Login Title Styling */
+  .login-box h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  
+  /* Input Fields Styling */
+  input {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #555;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  /* Input Field Focus Styling */
+  input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    outline: none;
+  }
+  
+  .password-container:hover {
+    color: #5b6b7c;
+  }
+
+
+  /* Password Input Container */
+  .password-container {
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
+  }
+  
+  /* Password Field */
+  .password-container input {
+    width: 100%;
+    padding-right: 45px; /* Space for the eye icon */
+    box-sizing: border-box;
+  }
+  
+  /* Show/Hide Password Button */
+  .show-password-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #8fa2b7;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  .show-password-btn:hover {
+    color: #5b6b7c;
+  }
+  
+  /* Submit Button Styling */
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  /* Button Hover Effect */
+  .login-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Error Message Styling */
+  .error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 500;
+  }
+  
