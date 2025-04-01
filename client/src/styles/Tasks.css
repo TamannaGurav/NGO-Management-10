@@ -1,64 +1,76 @@
-/* Global Styling */
-body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  /* Task List Container */
-  .tasks-container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  
-  /* Card Styling */
-  .card {
-    border-radius: 15px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Task Item Hover Effects */
-  .task-item:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-    transform: translateY(-5px);
-    transition: all 0.3s ease-in-out;
-  }
-  
-  /* Button Hover Effects */
-  button:hover {
-    background-color: #007bff !important;
-    transform: translateY(-2px);
-    transition: all 0.2s ease;
-  }
-  
-  button:active {
-    transform: translateY(1px);
-    transition: all 0.1s ease;
-  }
-  
-  /* Task Title and Description */
-  h5.text-truncate {
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-  
-  p {
-    font-size: 1rem;
-    color: #6c757d;
-    font-weight: 400;
-  }
-  
-  small {
-    font-size: 0.9rem;
-    color: #495057;
-  }
-  
-  /* Spinner Centering */
-  .spinner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
+/* General Container Styles */
+.tasks-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Card and Item Styling */
+.task-list-container {
+  margin-top: 30px;
+}
+
+.card {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.task-card {
+  background-color: #fff;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-item:hover .task-card {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+/* Task Title */
+.task-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Task Button */
+.view-task-btn {
+  background-color: #007bff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.view-task-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Task Description */
+.task-item p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+/* Hover Effects */
+.task-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.task-item:active {
+  transform: scale(0.95);
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading Spinner */
+.spinner {
+  margin-top: 50px;
+  text-align: center;
+}
+

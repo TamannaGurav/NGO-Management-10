@@ -48,11 +48,6 @@
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     outline: none;
   }
-  
-  .password-container:hover {
-    color: #5b6b7c;
-  }
-
 
   /* Password Input Container */
   .password-container {

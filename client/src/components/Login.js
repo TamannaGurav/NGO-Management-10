@@ -16,7 +16,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await API.post("auth/login", { email, password });
+      const response = await API.post("/api/auth/login", { email, password });
   
       // Log the API response to see if the token is included
       console.log("API Response:", response);

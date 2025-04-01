@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, ListGroup, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion'; // For animations
-import '../styles/Tasks.css';
+import '../styles/Tasks.css'; // Import your custom CSS for styling
+
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ const Tasks = () => {
 
     const fetchTasks = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/tasks`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/tasks`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -40,7 +41,7 @@ const Tasks = () => {
   }, [navigate]);
 
   return (
-    <div className="tasks-container container mt-40">
+    <div className="tasks-container container mt-4">
       <h3 className="mb-4 text-center">Your Tasks</h3>
       {loading ? (
         <div className="d-flex justify-content-center">
@@ -61,15 +62,16 @@ const Tasks = () => {
                     <motion.div
                       key={task._id}
                       className="task-item mb-3"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.05, rotate: -2 }}
+                      whileTap={{ scale: 0.95, rotate: 2 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                     >
-                      <ListGroup.Item className="p-3">
+                      <ListGroup.Item className="p-4 rounded-lg task-card">
                         <div className="d-flex justify-content-between align-items-center">
-                          <h5 className="text-truncate" style={{ maxWidth: '70%' }}>
+                          <h5 className="text-truncate task-title" style={{ maxWidth: '70%' }}>
                             {task.title}
                           </h5>
-                          <Button variant="info" size="sm">View Task</Button>
+                          <Button variant="info" size="sm" className="view-task-btn">View Task</Button>
                         </div>
                         <p>{task.description}</p>
                         <small className="text-muted">
