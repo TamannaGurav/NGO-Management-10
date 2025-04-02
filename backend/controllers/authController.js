@@ -89,4 +89,36 @@ const getMe = async (req, res) => {
   res.json(req.user);
 };
 
-module.exports = { registerUser, loginUser, getMe };
+const changePassword = async (req, res) => {
+  try {
+      const { oldPassword, newPassword } = req.body;
+      const userId = req.user.id; // Get user ID from the JWT (added by protect middleware)
+
+      // Find the user
+      const user = await User.findById(userId);
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Verify the old password
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      if (!isPasswordValid) {
+          return res.status(401).json({ message: 'Invalid old password' });
+      }
+
+      // Hash the new password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+      // Update the user's password
+      user.password = hashedPassword;
+      await user.save();
+
+      res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+      console.error('Error changing password:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+module.exports = { registerUser, loginUser, getMe, changePassword };

@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerUser, loginUser, getMe } = require("../controllers/authController");
+const { registerUser, loginUser, getMe, changePassword } = require("../controllers/authController");
 const { protect } = require("../middlewares/authMiddleware");
 const { authorize } = require("../middlewares/authorize");
 const { approveAdmin } = require("../controllers/superAdminController");
@@ -24,3 +24,6 @@ router.post("/approve-ngo", protect, authorize("super_admin"), (req, res) => {
 // Super Admin approves admin
 router.post("/approve/:userId", protect, authorize("super_admin"), approveAdmin);
 module.exports = router;
+
+router.put("/change-password", protect, changePassword);
+
