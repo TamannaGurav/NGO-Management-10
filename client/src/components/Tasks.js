@@ -245,18 +245,26 @@ const Tasks = () => {
                                                     </>
                                                 )}
 
-                                                {["admin", "staff"].includes(user?.role) && (
-                                                    <div className="mt-3">
-                                                        <Button variant="outline-primary" size="sm" className="me-2">
-                                                            Edit Task
-                                                        </Button>
-                                                        {user.role === "admin" && (
-                                                            <Button variant="outline-danger" size="sm" onClick={() => handleDelete(task._id)}>
-                                                                Delete Task
-                                                            </Button>
-                                                        )}
-                                                    </div>
-                                                )}
+{["admin", "staff"].includes(user?.role) && task.status !== "completed" && (
+    <div className="mt-3">
+        <Button variant="outline-primary" size="sm" className="me-2">
+            Edit Task
+        </Button>
+        {user.role === "admin" && (
+            <Button variant="outline-danger" size="sm" onClick={() => handleDelete(task._id)}>
+                Delete Task
+            </Button>
+        )}
+    </div>
+)}
+
+{task.status === "completed" && (
+    <div className="mt-3">
+        <Button variant="success" size="sm" disabled>
+            Completed
+        </Button>
+    </div>
+)}
 
                                                 {user?.role === "admin" && task.status === "pending_confirmation" && (
                                                     <Button
