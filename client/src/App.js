@@ -6,6 +6,7 @@ import Tasks from './components/Tasks';
 import Donations from './components/Donations'; // Example of another page
 import Volunteers from './components/Volunteers'; // Example of another page
 import Profile from './components/Profile'; // Example of a profile page
+import ChangePassword from './components/ChangePassword'; // Example of a change password page
 import Settings from './components/Settings'; // Example of a settings page
 import ProtectedRoute from './components/ProtectedRoute'; // This ensures the route is protected
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -42,6 +43,8 @@ const App = () => {
     {/* <Route path="events" element={<Events />} /> */}
     {/* <Route path="reports" element={<Reports />} /> */}
     <Route path="settings" element={<Settings />} />
+    <Route path="change-password" element={<ChangePassword />} /> {/* Add this route */}
+
   </Route>
 </Routes>
 

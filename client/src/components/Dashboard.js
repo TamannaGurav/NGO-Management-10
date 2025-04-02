@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, Offcanvas, Button } from 'react-bootstrap';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
+import ChangePassword from './ChangePassword';
 import { useLocation } from 'react-router-dom';
+
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -30,6 +32,8 @@ const Dashboard = () => {
       { path: '/dashboard/events', label: 'Events' },
       { path: '/dashboard/reports', label: 'Reports' },
       { path: '/dashboard/settings', label: 'Settings' },
+      { path: '/dashboard/change-password', label: 'Change Password' }, // Added
+
     ],
     'admin': [
       { path: '/dashboard/tasks', label: 'Tasks' },
@@ -37,15 +41,21 @@ const Dashboard = () => {
       { path: '/dashboard/donations', label: 'Donations' },
       { path: '/dashboard/events', label: 'Events' },
       { path: '/dashboard/reports', label: 'Reports' },
+      { path: '/dashboard/change-password', label: 'Change Password' }, // Added
+
     ],
     'staff': [
       { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/donations', label: 'Donations' },
       { path: '/dashboard/events', label: 'Events' },
+      { path: '/dashboard/change-password', label: 'Change Password' }, // Added
+
     ],
     'volunteer': [
       { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/events', label: 'Events' },
+      { path: '/dashboard/change-password', label: 'Change Password' }, // Added
+
     ],
   };
 
@@ -112,3 +122,15 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+{/* <div className="dashboard-content">
+<Container>
+    <Routes>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/donations" element={<Donations />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<Outlet />} />
+    </Routes>
+</Container>
+</div> */}
