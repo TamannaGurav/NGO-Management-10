@@ -122,15 +122,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-{/* <div className="dashboard-content">
-<Container>
-    <Routes>
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/donations" element={<Donations />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="*" element={<Outlet />} />
-    </Routes>
-</Container>
-</div> */}

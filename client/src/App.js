@@ -9,6 +9,7 @@ import Profile from './components/Profile'; // Example of a profile page
 import ChangePassword from './components/ChangePassword'; // Example of a change password page
 import Settings from './components/Settings'; // Example of a settings page
 import ProtectedRoute from './components/ProtectedRoute'; // This ensures the route is protected
+import EditTask from './components/EditTask';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
@@ -44,6 +45,8 @@ const App = () => {
     {/* <Route path="reports" element={<Reports />} /> */}
     <Route path="settings" element={<Settings />} />
     <Route path="change-password" element={<ChangePassword />} /> {/* Add this route */}
+    <Route path="edit-task/:taskId" element={<EditTask />} /> {/* Add this route */}
+
 
   </Route>
 </Routes>
