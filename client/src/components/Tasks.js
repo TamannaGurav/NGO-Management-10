@@ -1,44 +1,127 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, ListGroup, Spinner } from 'react-bootstrap';
+import { Card, Button, ListGroup, Dropdown, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion'; // For animations
-import '../styles/Tasks.css'; // Import your custom CSS for styling
+import '../styles/Tasks.css';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [taskStatuses, setTaskStatuses] = useState({});
 
   useEffect(() => {
-    // Fetch user from localStorage
     const storedUser = localStorage.getItem('user');
-    const user = storedUser ? JSON.parse(storedUser) : null;
+    const userData = storedUser ? JSON.parse(storedUser) : null;
 
-    if (!user) {
-      navigate('/login'); // Redirect to login if user not found
+    if (!userData) {
+      console.log('No user found, redirecting to login');
+      navigate('/login');
       return;
     }
 
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/tasks`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        const result = await response.json();
-        setTasks(result); // Set fetched tasks
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    setUser(userData);
     fetchTasks();
   }, [navigate]);
+
+  const fetchTasks = async () => {
+    try {
+      console.log('Fetching tasks...');
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/tasks`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const result = await response.json();
+      console.log('Tasks fetched:', result);
+
+      setTasks(result);
+
+      const statusMap = {};
+      result.forEach(task => {
+        statusMap[task._id] = task.status;
+      });
+      setTaskStatuses(statusMap);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      console.log('Deleting task with id:', taskId);
+      await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/tasks/${taskId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setTasks(tasks.filter(task => task._id !== taskId));
+      console.log('Task deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  const updateTaskStatus = async (taskId, newStatus) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/tasks/${taskId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update status');
+        return;
+      }
+
+      // Update local state immediately
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task._id === taskId ? { ...task, status: newStatus } : task
+        )
+      );
+
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+
+  const handleVolunteerComplete = async (taskId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/tasks/${taskId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ status: "completed" }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update status');
+        return;
+      }
+
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task._id === taskId ? { ...task, status: "pending_confirmation" } : task
+        )
+      );
+
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
 
   return (
     <div className="tasks-container container mt-4">
@@ -48,37 +131,83 @@ const Tasks = () => {
           <Spinner animation="border" variant="primary" />
         </div>
       ) : (
-        <motion.div
-          className="task-list-container"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
+        <div className="task-list-container">
           <Card className="shadow-lg rounded-lg">
             <Card.Body>
               {tasks.length > 0 ? (
                 <ListGroup variant="flush">
                   {tasks.map((task) => (
-                    <motion.div
-                      key={task._id}
-                      className="task-item mb-3"
-                      whileHover={{ scale: 1.05, rotate: -2 }}
-                      whileTap={{ scale: 0.95, rotate: 2 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    >
+                    <div key={task._id} className="task-item mb-3">
                       <ListGroup.Item className="p-4 rounded-lg task-card">
                         <div className="d-flex justify-content-between align-items-center">
                           <h5 className="text-truncate task-title" style={{ maxWidth: '70%' }}>
                             {task.title}
                           </h5>
-                          <Button variant="info" size="sm" className="view-task-btn">View Task</Button>
+                          <Button variant="info" size="sm" className="view-task-btn">
+                            View Task
+                          </Button>
                         </div>
                         <p>{task.description}</p>
                         <small className="text-muted">
                           Due Date: {new Date(task.dueDate).toLocaleDateString()}
                         </small>
+
+                        {user?.role === "volunteer" && (
+                          <>
+                            {task.status === "pending_confirmation" ? (
+                              <Button variant="secondary" size="sm" disabled>
+                                Pending Confirmation
+                              </Button>
+                            ) : task.status === "completed" ? (
+                              <Button variant="success" size="sm" disabled>
+                                Completed
+                              </Button>
+                            ) : (
+                              <Dropdown>
+                                <Dropdown.Toggle variant="warning" size="sm" id={`dropdown-${task._id}`}>
+                                  {task.status}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  <Dropdown.Item onClick={() => updateTaskStatus(task._id, "pending")}>
+                                    Pending
+                                  </Dropdown.Item>
+                                  <Dropdown.Item onClick={() => updateTaskStatus(task._id, "in-progress")}>
+                                    In Progress
+                                  </Dropdown.Item>
+                                  <Dropdown.Item onClick={() => handleVolunteerComplete(task._id)}>
+                                    Completed
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            )}
+                          </>
+                        )}
+
+                        {["admin", "staff"].includes(user?.role) && (
+                          <div className="mt-3">
+                            <Button variant="outline-primary" size="sm" className="me-2">
+                              Edit Task
+                            </Button>
+                            {user.role === "admin" && (
+                              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(task._id)}>
+                                Delete Task
+                              </Button>
+                            )}
+                          </div>
+                        )}
+
+                        {user?.role === "admin" && task.status === "pending_confirmation" && (
+                          <Button
+                            variant="success"
+                            size="sm"
+                            className="mt-2"
+                            onClick={() => updateTaskStatus(task._id, "completed")}
+                          >
+                            Confirm Completion
+                          </Button>
+                        )}
                       </ListGroup.Item>
-                    </motion.div>
+                    </div>
                   ))}
                 </ListGroup>
               ) : (
@@ -86,7 +215,7 @@ const Tasks = () => {
               )}
             </Card.Body>
           </Card>
-        </motion.div>
+        </div>
       )}
     </div>
   );

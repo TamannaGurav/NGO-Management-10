@@ -9,6 +9,8 @@ import Profile from './components/Profile'; // Example of a profile page
 import Settings from './components/Settings'; // Example of a settings page
 import ProtectedRoute from './components/ProtectedRoute'; // This ensures the route is protected
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+
 
 const App = () => {
   return (

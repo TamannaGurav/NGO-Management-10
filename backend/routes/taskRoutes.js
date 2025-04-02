@@ -10,7 +10,7 @@ const Task = require("../models/taskModel");
 router.post("/", protect, authorize("admin", "staff"), createTask);
 
 // Get all tasks (for admin, staff, or volunteer; volunteers see only tasks assigned to them)
-// router.get("/tasks", protect, getAllTasks);
+router.get("/", protect, getAllTasks);
 
 // Get a task by ID
 router.get("/:id", protect, getTaskById);
@@ -31,25 +31,25 @@ router.put("/:id/confirm", protect, authorize("admin"), confirmTaskCompletion);
 
 // Route to get tasks based on the user's role
 // Route to get tasks based on the user's role
-router.get('/', protect, async (req, res) => {
-    try {
-      const userRole = req.user.role; // This is fine
-      const userId = req.user._id; // Use _id instead of id
+// router.get('/', protect, async (req, res) => {
+//     try {
+//       const userRole = req.user.role; // This is fine
+//       const userId = req.user._id; // Use _id instead of id
     
-      let tasks;
-      if (userRole === 'volunteer') {
-        tasks = await Task.find({ assignedTo: userId }); // This now correctly filters tasks
-      } else if (['staff', 'admin', 'super_admin'].includes(userRole)) {
-        tasks = await Task.find();
-      } else {
-        return res.status(403).json({ message: 'Not authorized' });
-      }
+//       let tasks;
+//       if (userRole === 'volunteer') {
+//         tasks = await Task.find({ assignedTo: userId }); // This now correctly filters tasks
+//       } else if (['staff', 'admin', 'super_admin'].includes(userRole)) {
+//         tasks = await Task.find();
+//       } else {
+//         return res.status(403).json({ message: 'Not authorized' });
+//       }
     
-      res.json(tasks);
-    } catch (err) {
-      res.status(500).json({ message: 'Server error', error: err.message });
-    }
-  });
+//       res.json(tasks);
+//     } catch (err) {
+//       res.status(500).json({ message: 'Server error', error: err.message });
+//     }
+//   });
   
 
 module.exports = router;

@@ -19,13 +19,12 @@
 .task-card {
   background-color: #fff;
   border-radius: 10px;
-  transition: all 0.3s ease-in-out;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Task Hover Effect - Only Box Shadow (No Movement) */
 .task-item:hover .task-card {
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Task Title */
@@ -42,7 +41,6 @@
 .view-task-btn {
   background-color: #007bff;
   border: none;
-  transition: background-color 0.3s ease;
 }
 
 .view-task-btn:hover {
@@ -57,20 +55,9 @@
   margin-top: 10px;
 }
 
-/* Hover Effects */
-.task-item:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.1);
-}
-
+/* Fully Static Hover Effect */
+.task-item:hover,
 .task-item:active {
-  transform: scale(0.95);
-  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+  transform: none !important;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
 }
-
-/* Loading Spinner */
-.spinner {
-  margin-top: 50px;
-  text-align: center;
-}
-

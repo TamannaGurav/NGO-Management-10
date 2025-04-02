@@ -51,7 +51,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+      await fetch('/api/login', { method: 'POST', credentials: 'include' });
     } catch (error) {
       console.error('Logout failed:', error);
     }
