@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, Button, Alert, Spinner } from "react-bootstrap";
+import { Table, Button, Alert, Spinner, Form, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ManageNGOs = () => {
@@ -8,8 +8,12 @@ const ManageNGOs = () => {
     const [approvedNGOs, setApprovedNGOs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [approvalLoading, setApprovalLoading] = useState(null); // Track approval loading state
-    const [rejectionLoading, setRejectionLoading] = useState(null); // Track rejection loading state
+    const [approvalLoading, setApprovalLoading] = useState(null);
+    const [rejectionLoading, setRejectionLoading] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [confirmNgoId, setConfirmNgoId] = useState(null);
+    const [confirmAction, setConfirmAction] = useState("");
 
     const fetchNGOs = async () => {
         try {
@@ -44,7 +48,7 @@ const ManageNGOs = () => {
     }, []);
 
     const handleApprove = async (ngoId) => {
-        setApprovalLoading(ngoId); // Set loading for this NGO
+        setApprovalLoading(ngoId);
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -60,12 +64,12 @@ const ManageNGOs = () => {
             console.error("❌ Error approving NGO:", err);
             alert('Error approving NGO.');
         } finally {
-            setApprovalLoading(null); // Reset loading state
+            setApprovalLoading(null);
         }
     };
 
     const handleReject = async (ngoId) => {
-        setRejectionLoading(ngoId); // Set loading for this NGO
+        setRejectionLoading(ngoId);
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -81,13 +85,38 @@ const ManageNGOs = () => {
             console.error("❌ Error rejecting NGO:", err);
             alert('Error rejecting NGO.');
         } finally {
-            setRejectionLoading(null); // Reset loading state
+            setRejectionLoading(null);
         }
     };
+
+    const handleConfirm = async () => {
+        if (confirmAction === "approve") {
+            await handleApprove(confirmNgoId);
+        } else if (confirmAction === "reject") {
+            await handleReject(confirmNgoId);
+        }
+        setShowConfirmation(false);
+    };
+
+    const filteredPendingNGOs = pendingNGOs.filter((ngo) =>
+        ngo.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredApprovedNGOs = approvedNGOs.filter((ngo) =>
+        ngo.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div>
             <h2>Manage NGOs</h2>
+
+            <Form.Control
+                type="text"
+                placeholder="Search NGOs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="mb-3"
+            />
 
             {loading && <p>Loading...</p>}
 
@@ -96,7 +125,7 @@ const ManageNGOs = () => {
             {!loading && !error && (
                 <>
                     <h3>Pending NGOs</h3>
-                    {pendingNGOs.length > 0 ? (
+                    {filteredPendingNGOs.length > 0 ? (
                         <Table striped bordered hover responsive>
                             <thead>
                                 <tr>
@@ -104,21 +133,29 @@ const ManageNGOs = () => {
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {pendingNGOs.map((ngo) => (
+                            <tbody> {/* Added <tbody> here */}
+                                {filteredPendingNGOs.map((ngo) => (
                                     <tr key={ngo._id}>
                                         <td>{ngo.name}</td>
                                         <td>
                                             <Button
                                                 variant="success"
-                                                onClick={() => handleApprove(ngo._id)}
+                                                onClick={() => {
+                                                    setConfirmNgoId(ngo._id);
+                                                    setConfirmAction("approve");
+                                                    setShowConfirmation(true);
+                                                }}
                                                 disabled={approvalLoading === ngo._id}
                                             >
                                                 {approvalLoading === ngo._id ? <Spinner size="sm" /> : "Approve"}
                                             </Button>
                                             <Button
                                                 variant="danger"
-                                                onClick={() => handleReject(ngo._id)}
+                                                onClick={() => {
+                                                    setConfirmNgoId(ngo._id);
+                                                    setConfirmAction("reject");
+                                                    setShowConfirmation(true);
+                                                }}
                                                 disabled={rejectionLoading === ngo._id}
                                                 className="ms-2"
                                             >
@@ -134,15 +171,15 @@ const ManageNGOs = () => {
                     )}
 
                     <h3>Approved NGOs</h3>
-                    {approvedNGOs.length > 0 ? (
+                    {filteredApprovedNGOs.length > 0 ? (
                         <Table striped bordered hover responsive>
                             <thead>
                                 <tr>
                                     <th>NGO Name</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {approvedNGOs.map((ngo) => (
+                            <tbody> {/* Added <tbody> here */}
+                                {filteredApprovedNGOs.map((ngo) => (
                                     <tr key={ngo._id}>
                                         <td>{ngo.name}</td>
                                     </tr>
@@ -154,6 +191,23 @@ const ManageNGOs = () => {
                     )}
                 </>
             )}
+
+            <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Action</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to {confirmAction} this NGO?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleConfirm}>
+                        Confirm
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
