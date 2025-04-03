@@ -11,6 +11,7 @@ import ProtectedRoute from './components/ProtectedRoute'; // This ensures the ro
 import EditTask from './components/EditTask';
 import DonationsPage from './components/donations/DonationsPage';
 import NGORegistration from './components/NgoRegistration';
+import ManageNGOs from './components/ManageNgos';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
@@ -47,7 +48,8 @@ const App = () => {
     {/* <Route path="reports" element={<Reports />} /> */}
     <Route path="settings" element={<Settings />} />
     <Route path="change-password" element={<ChangePassword />} /> {/* Add this route */}
-    <Route path="edit-task/:taskId" element={<EditTask />} /> {/* Add this route */}
+    {/* <Route path="edit-task/:taskId" element={<EditTask />} /> Add this route */}
+    <Route path="ngos" element={<ManageNGOs />} />
     <Route path="profile" element={<Profile />} />
     <Route path="donations" element={<DonationsPage />} /> {/* ✅ Add this */}
 

@@ -394,6 +394,17 @@ const getPendingNGOs = async (req, res) => {
 };
 
 
+const getApprovedNGOs = async (req, res) => {
+    try {
+        const approvedNGOs = await NGO.find({ status: "approved" }); // Fetch only approved NGOs
+        res.status(200).json(approvedNGOs);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching approved NGOs" });
+    }
+};
+
+
+
 /**
  * Get NGO by ID
  */
@@ -445,5 +456,6 @@ module.exports = {
     getAllNGOs,
     getNGOById,
     deleteNGO,
-    getPendingNGOs
+    getPendingNGOs,
+    getApprovedNGOs
 };

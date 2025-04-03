@@ -6,7 +6,8 @@ const {
     getAllNGOs,
     getNGOById,
     deleteNGO,
-    getPendingNGOs
+    getPendingNGOs,
+    getApprovedNGOs,
 } = require("../controllers/ngoController");
 const { authorize } = require("../middlewares/authorize");
 const { protect } = require("../middlewares/authMiddleware");
@@ -28,6 +29,8 @@ router.put("/:id/reject", protect, authorize("super_admin"), rejectNGO);
 router.get("/", protect, authorize("super_admin"), getAllNGOs);
 
 router.get("/pending", protect, authorize("super_admin"), getPendingNGOs);
+// Route for Super Admin to get only approved NGOs
+router.get("/approved", protect, authorize("super_admin"), getApprovedNGOs);
 
 // Route to get a single NGO by ID (accessible to logged-in users)
 router.get("/:id", protect, getNGOById);

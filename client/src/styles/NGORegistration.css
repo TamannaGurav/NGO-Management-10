@@ -1,0 +1,45 @@
+.ngo-registration-container {
+    padding: 40px 0;
+    background-color: #f8f9fa; /* Light background */
+  }
+  
+  .ngo-registration-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+  
+  .ngo-registration-title {
+    color: #007bff; /* Primary blue */
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  .ngo-registration-label {
+    font-weight: 500;
+    color: #343a40; /* Darker text */
+  }
+  
+  .ngo-registration-input {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+  }
+  
+  .ngo-registration-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 500;
+  }
+  
+  .ngo-registration-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .ngo-registration-message {
+    margin-top: 20px;
+    border-radius: 8px;
+  }

@@ -44,11 +44,11 @@ const Dashboard = () => {
   const sidebarLinks = {
     'super_admin': [
       { path: '/dashboard/profile', label: 'Profile' },
-      { path: '/dashboard/ngos', label: 'Manage NGOs' },
-      { path: '/dashboard/tasks', label: 'Tasks' },
+      { path: '/dashboard/ngos', label: 'Manage NGOs' },  // 🆕 Added this line
+      // { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/members', label: 'Members' },
-      { path: '/dashboard/donations', label: 'Donations' },
-      { path: '/dashboard/events', label: 'Events' },
+      // { path: '/dashboard/donations', label: 'Donations' },
+      // { path: '/dashboard/events', label: 'Events' },
       { path: '/dashboard/reports', label: 'Reports' },
       { path: '/dashboard/settings', label: 'Settings' },
       { path: '/dashboard/change-password', label: 'Change Password' },
