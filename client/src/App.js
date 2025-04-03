@@ -10,6 +10,7 @@ import Settings from './components/Settings'; // Example of a settings page
 import ProtectedRoute from './components/ProtectedRoute'; // This ensures the route is protected
 import EditTask from './components/EditTask';
 import DonationsPage from './components/donations/DonationsPage';
+import NGORegistration from './components/NgoRegistration';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
@@ -36,6 +37,7 @@ const App = () => {
         <Routes>
         <Route path="/" element={<Login />} />
   <Route path="/login" element={<Login />} />
+  <Route path="/ngo-registration" element={<NGORegistration />} /> {/* ✅ Add NGO Registration Page */}
   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} >
     {/* <Route path="ngos" element={<ManageNGOs />} /> */}
     <Route path="tasks" element={<Tasks />} />
