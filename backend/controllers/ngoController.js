@@ -374,6 +374,26 @@ const getAllNGOs = async (req, res) => {
     }
 };
 
+const getPendingNGOs = async (req, res) => {
+    try {
+        // Ensure the user is authorized
+        if (!req.user || req.user.role !== "super_admin") {
+            return res.status(403).json({ success: false, message: "Access denied. Super Admin only." });
+        }
+
+        // Fetch pending NGOs (avoid treating "pending" as an ID)
+        const pendingNGOs = await NGO.find({ status: "pending" }).select("-__v");
+        console.log("Request received at:", req.path);
+
+
+        return res.status(200).json({ success: true, ngos: pendingNGOs });
+    } catch (error) {
+        console.error("❌ Error fetching pending NGOs:", error.message);
+        return res.status(500).json({ success: false, message: "Server error", error: error.message });
+    }
+};
+
+
 /**
  * Get NGO by ID
  */
@@ -424,5 +444,6 @@ module.exports = {
     rejectNGO,
     getAllNGOs,
     getNGOById,
-    deleteNGO
+    deleteNGO,
+    getPendingNGOs
 };
