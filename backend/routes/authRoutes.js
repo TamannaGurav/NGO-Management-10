@@ -1,9 +1,8 @@
 const express = require("express");
-const { registerUser, loginUser, getMe, changePassword } = require("../controllers/authController");
+const { registerUser, loginUser, getMe, changePassword, updateProfile } = require("../controllers/authController");
 const { protect } = require("../middlewares/authMiddleware");
 const { authorize } = require("../middlewares/authorize");
 const { approveAdmin } = require("../controllers/superAdminController");
-
 const router = express.Router();
 
 // User Registration
@@ -23,7 +22,12 @@ router.post("/approve-ngo", protect, authorize("super_admin"), (req, res) => {
 
 // Super Admin approves admin
 router.post("/approve/:userId", protect, authorize("super_admin"), approveAdmin);
+
+// In authRoutes.js
+router.put('/me', protect, updateProfile);
+router.put("/change-password", protect, changePassword);
+
+
 module.exports = router;
 
-router.put("/change-password", protect, changePassword);
 

@@ -25,6 +25,7 @@ const Dashboard = () => {
   // Define role-based sidebar links
   const sidebarLinks = {
     'super_admin': [
+      { path: '/dashboard/profile', label: 'Profile' },  //added
       { path: '/dashboard/ngos', label: 'Manage NGOs' },
       { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/members', label: 'Members' },
@@ -36,6 +37,7 @@ const Dashboard = () => {
 
     ],
     'admin': [
+      { path: '/dashboard/profile', label: 'Profile' },  //added
       { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/members', label: 'Members' },
       { path: '/dashboard/donations', label: 'Donations' },
@@ -45,6 +47,7 @@ const Dashboard = () => {
 
     ],
     'staff': [
+      { path: '/dashboard/profile', label: 'Profile' },  //added
       { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/donations', label: 'Donations' },
       { path: '/dashboard/events', label: 'Events' },
@@ -52,6 +55,7 @@ const Dashboard = () => {
 
     ],
     'volunteer': [
+      { path: '/dashboard/profile', label: 'Profile' },  //added
       { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/events', label: 'Events' },
       { path: '/dashboard/change-password', label: 'Change Password' }, // Added

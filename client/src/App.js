@@ -46,6 +46,7 @@ const App = () => {
     <Route path="settings" element={<Settings />} />
     <Route path="change-password" element={<ChangePassword />} /> {/* Add this route */}
     <Route path="edit-task/:taskId" element={<EditTask />} /> {/* Add this route */}
+    <Route path="profile" element={<Profile />} />
 
 
   </Route>
