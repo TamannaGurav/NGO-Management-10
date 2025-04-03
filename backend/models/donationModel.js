@@ -23,6 +23,7 @@ const donationSchema = new mongoose.Schema(
       type: String,
       enum: ["cash", "bank transfer", "credit card"],
       required: [true, "Payment method is required"],
+      lowercase: true,
     },
     donationDate: {
       type: Date,

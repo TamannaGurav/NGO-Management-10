@@ -1,38 +1,76 @@
 const Donation = require("../models/donationModel");
-
 /**
  * Create a new donation.
  * This endpoint can be accessed by admin and staff.
  */
+const mongoose = require("mongoose"); // Add this if not already imported
+
 const createDonation = async (req, res) => {
+  console.log("Received Donation Data:", req.body);
   try {
     const { donorName, donorEmail, amount, paymentMethod } = req.body;
-    const ngoId = req.user.ngoId; // Use the NGO ID from the logged-in user
+
+    if (!donorName || !donorEmail || !amount) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const ngoId = req.user.ngoId;
+    console.log("User NGO ID:", ngoId);
 
     if (!ngoId) {
       return res.status(400).json({ message: "User is not linked to any NGO" });
     }
 
+    const ObjectId = mongoose.Types.ObjectId;
+
+    // Ensure ngoId is valid
+    if (!mongoose.Types.ObjectId.isValid(ngoId)) {
+      return res.status(400).json({ message: "Invalid NGO ID format" });
+    }
+
+    // Correctly create ObjectId
+    const formattedNgoId = new mongoose.Types.ObjectId(ngoId);
+
+    // Ensure amount is a valid number
+    const amountNumber = Number(amount);
+    if (isNaN(amountNumber) || amountNumber <= 0) {
+      return res.status(400).json({ message: "Amount must be a valid positive number" });
+    }
+
+    // Create donation record
     const donation = new Donation({
-      ngoId,
+      ngoId: formattedNgoId,
       donorName,
       donorEmail,
-      amount,
+      amount: amountNumber,
       paymentMethod,
     });
 
     await donation.save();
     res.status(201).json({ message: "Donation recorded successfully", donation });
+
   } catch (error) {
+    console.error("Error creating donation:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+
+//     await donation.save();
+//     res.status(201).json({ message: "Donation recorded successfully", donation });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
+
 
 /**
  * Get all donations for the logged-in user's NGO.
  * Only admin and staff can view all donations.
  */
 const getAllDonations = async (req, res) => {
+  console.log("User Role:", req.user.role);
   try {
     const ngoId = req.user.ngoId;
     if (!ngoId) {
