@@ -7,40 +7,88 @@ const ManageNGOs = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        const fetchNGOs = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    throw new Error("No token found. Please log in again.");
-                }
-
-                const headers = { Authorization: `Bearer ${token}` };
-
-                // Fetch pending NGOs
-                const pendingRes = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/ngos/pending`, {
-                    headers,
-                    withCredentials: true,
-                });
-                setPendingNGOs(pendingRes.data.ngos || pendingRes.data || []);  // ✅ Handle both structures
-
-                // Fetch approved NGOs
-                const approvedRes = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/ngos/approved`, {
-                    headers,
-                    withCredentials: true,
-                });
-                setApprovedNGOs(approvedRes.data.ngos || approvedRes.data || []);  // ✅ Handle both structures
-
-            } catch (err) {
-                setError("Failed to fetch NGOs. Please try again.");
-                console.error("❌ Error fetching NGOs:", err);
-            } finally {
-                setLoading(false);
+    const fetchNGOs = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error("No token found. Please log in again.");
             }
-        };
 
-        fetchNGOs();
+            const headers = { Authorization: `Bearer ${token}` };
+
+            // Fetch pending NGOs
+            const pendingRes = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/ngos/pending`, {
+                headers,
+                withCredentials: true,
+            });
+            setPendingNGOs(pendingRes.data.ngos || pendingRes.data || []);  // ✅ Handle both structures
+
+            // Fetch approved NGOs
+            const approvedRes = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/ngos/approved`, {
+                headers,
+                withCredentials: true,
+            });
+            setApprovedNGOs(approvedRes.data.ngos || approvedRes.data || []);  // ✅ Handle both structures
+
+        } catch (err) {
+            setError("Failed to fetch NGOs. Please try again.");
+            console.error("❌ Error fetching NGOs:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchNGOs();  // Call the function when the component mounts
     }, []);
+
+    const handleApprove = async (ngoId) => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error("No token found. Please log in again.");
+            }
+
+            const headers = { Authorization: `Bearer ${token}` };
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/api/ngos/${ngoId}/approve`, 
+                {},
+                { headers }
+            );
+            alert('NGO Approved!');
+
+            // Refresh the NGO list after approval
+            fetchNGOs();  // Call fetchNGOs to update the list
+        } catch (err) {
+            console.error("❌ Error approving NGO:", err);
+            alert('Error approving NGO.');
+        }
+    };
+
+    const handleReject = async (ngoId) => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error("No token found. Please log in again.");
+            }
+
+            const headers = { Authorization: `Bearer ${token}` };
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/api/ngos/${ngoId}/reject`, 
+                {},
+                { headers }
+            );
+            alert('NGO Rejected!');
+
+            // Refresh the NGO list after rejection
+            fetchNGOs();  // Call fetchNGOs to update the list
+        } catch (err) {
+            console.error("❌ Error rejecting NGO:", err);
+            alert('Error rejecting NGO.');
+        }
+    };
 
     return (
         <div>
@@ -56,7 +104,11 @@ const ManageNGOs = () => {
                     {pendingNGOs.length > 0 ? (
                         <ul>
                             {pendingNGOs.map((ngo) => (
-                                <li key={ngo._id}>{ngo.name}</li>
+                                <li key={ngo._id}>
+                                    {ngo.name}
+                                    <button onClick={() => handleApprove(ngo._id)}>Approve</button>
+                                    <button onClick={() => handleReject(ngo._id)}>Reject</button>
+                                </li>
                             ))}
                         </ul>
                     ) : (

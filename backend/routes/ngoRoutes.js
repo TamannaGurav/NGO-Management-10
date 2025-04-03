@@ -20,10 +20,10 @@ const router = express.Router();
 router.post("/request", requestNGORegistration);
 
 // Route for Super Admin to approve an NGO
-router.put("/:id/approve", protect, authorize("super_admin"), approveNGO);
+router.post("/:id/approve", protect, authorize("super_admin"), approveNGO);
 
 // Route for Super Admin to reject and (not)delete an NGO request
-router.put("/:id/reject", protect, authorize("super_admin"), rejectNGO);
+router.post("/:id/reject", protect, authorize("super_admin"), rejectNGO);
 
 // Route for Super Admin to get all NGOs (both pending and approved)
 router.get("/", protect, authorize("super_admin"), getAllNGOs);
