@@ -21,8 +21,8 @@ const protect = async (req, res, next) => {
     // Attach user to request
     req.user = await User.findById(decoded.id).select("-password");
 
-    if (!req.user) {
-      return res.status(401).json({ message: "User not found" });
+    if (!req.user || !req.user.ngoId) {
+      return res.status(401).json({ message: "User is not associated with any NGO" });
     }
 
     next();

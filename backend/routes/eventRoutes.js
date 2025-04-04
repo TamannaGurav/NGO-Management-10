@@ -1,22 +1,34 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent } = require("../controllers/eventController");
-const { protect } = require("../middlewares/authMiddleware");
-const { authorize } = require("../middlewares/authorize");
+const { protect } = require('../middlewares/authMiddleware');  // Assuming protect middleware is already in place
+const { authorize } = require('../middlewares/authorize');  // Assuming authorize middleware is already in place
 
-// Create a new event (admins and staff only)
-router.post("/", protect, authorize("admin", "staff"), createEvent);
+// Importing event controller methods
+const { 
+  createEvent, 
+  getAllEvents, 
+  getEventById, 
+  updateEvent, 
+  deleteEvent, 
+  addParticipant 
+} = require('../controllers/eventController');
 
-// Get all events for the NGO (accessible to all roles)
-router.get("/", protect, getAllEvents);
+// Create Event (admins and staff only)
+router.post('/', protect, authorize('admin', 'staff'), createEvent);
 
-// Get a specific event by ID
-router.get("/:id", protect, getEventById);
+// Get All Events (public access or admins/staff as needed)
+router.get('/', protect, getAllEvents);
 
-// Update an event (admins and staff only)
-router.put("/:id", protect, authorize("admin", "staff"), updateEvent);
+// Get Event by ID (public access or admins/staff)
+router.get('/:id', protect, authorize('admin', 'staff'), getEventById);
 
-// Delete an event (admins only)
-router.delete("/:id", protect, authorize("admin"), deleteEvent);
+// Update Event (admins and staff only)
+router.put('/:id', protect, authorize('admin', 'staff'), updateEvent);
+
+// Delete Event (admins only)
+router.delete('/:id', protect, authorize('admin'), deleteEvent);
+
+// Register Participant for an Event (any user can register)
+router.post('/register', protect, addParticipant);
 
 module.exports = router;

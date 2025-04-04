@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, Offcanvas, Button } from 'react-bootstrap';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
-import ChangePassword from './ChangePassword';
+// import ChangePassword from './ChangePassword';
 import { useLocation } from 'react-router-dom';
-import DonationsPage from "../components/donations/DonationsPage"; 
+// import DonationsPage from "../components/donations/DonationsPage"; 
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -48,7 +48,7 @@ const Dashboard = () => {
       // { path: '/dashboard/tasks', label: 'Tasks' },
       { path: '/dashboard/members', label: 'Members' },
       // { path: '/dashboard/donations', label: 'Donations' },
-      // { path: '/dashboard/events', label: 'Events' },
+      { path: '/dashboard/events', label: 'Events' },
       { path: '/dashboard/reports', label: 'Reports' },
       { path: '/dashboard/settings', label: 'Settings' },
       { path: '/dashboard/change-password', label: 'Change Password' },

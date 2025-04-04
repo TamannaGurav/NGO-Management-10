@@ -1,111 +1,97 @@
-const Event = require("../models/eventModel");
+const Event = require('../models/eventModel');
 
-/**
- * Create a new event for an NGO.
- * Only admins and staff can create events.
- */
-const createEvent = async (req, res) => {
+// Create Event
+exports.createEvent = async (req, res) => {
   try {
-    const { title, description, location, eventDate } = req.body;
-    const ngoId = req.user.ngoId;
-    if (!ngoId) {
-      return res.status(400).json({ message: "User is not linked to any NGO" });
-    }
-    
-    const newEvent = new Event({
-      title,
-      description,
+    const { name, date, location, description, targetDonation } = req.body;
+    const event = new Event({
+      name,
+      date,
       location,
-      eventDate,
-      ngoId,
+      description,
+      targetDonation,
+      createdBy: req.user.id,  // Assuming user is logged in and their ID is available
     });
-    await newEvent.save();
-    res.status(201).json({ message: "Event created successfully", event: newEvent });
+    await event.save();
+    res.status(201).json({ message: 'Event created successfully', event });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: 'Error creating event', error });
   }
 };
 
-/**
- * Get all events for the NGO.
- * Accessible by admins, staff, and volunteers (volunteers might see only upcoming events, for example).
- */
-const getAllEvents = async (req, res) => {
+// Get All Events
+exports.getAllEvents = async (req, res) => {
   try {
-    const ngoId = req.user.ngoId;
-    if (!ngoId) {
-      return res.status(400).json({ message: "User is not linked to any NGO" });
-    }
-    const events = await Event.find({ ngoId });
+    const events = await Event.find().populate('createdBy', 'name');
     res.status(200).json(events);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: 'Error fetching events', error });
   }
 };
 
-/**
- * Get an event by ID.
- */
-const getEventById = async (req, res) => {
+// Get Event by ID
+exports.getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id);
+    const event = await Event.findById(req.params.id).populate('createdBy', 'name');
     if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-    if (event.ngoId.toString() !== req.user.ngoId.toString()) {
-      return res.status(403).json({ message: "Access denied: Event does not belong to your NGO" });
+      return res.status(404).json({ message: 'Event not found' });
     }
     res.status(200).json(event);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: 'Error fetching event details', error });
   }
 };
 
-/**
- * Update an event.
- * Only admins and staff can update events.
- */
-const updateEvent = async (req, res) => {
+// Update Event
+exports.updateEvent = async (req, res) => {
   try {
-    const { title, description, location, eventDate } = req.body;
-    const event = await Event.findById(req.params.id);
+    const { name, date, location, description, targetDonation, status } = req.body;
+    const event = await Event.findByIdAndUpdate(
+      req.params.id,  // Using :id parameter from route
+      { name, date, location, description, targetDonation, status },
+      { new: true }
+    );
     if (!event) {
-      return res.status(404).json({ message: "Event not found" });
+      return res.status(404).json({ message: 'Event not found' });
     }
-    if (event.ngoId.toString() !== req.user.ngoId.toString()) {
-      return res.status(403).json({ message: "Access denied: Event does not belong to your NGO" });
+    res.status(200).json({ message: 'Event updated successfully', event });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating event', error });
+  }
+};
+
+// Delete Event
+exports.deleteEvent = async (req, res) => {
+  try {
+    const event = await Event.findByIdAndDelete(req.params.id);
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
     }
-    
-    if (title) event.title = title;
-    if (description) event.description = description;
-    if (location) event.location = location;
-    if (eventDate) event.eventDate = eventDate;
-    
+    res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting event', error });
+  }
+};
+
+// Register Participant for an Event (optional based on your needs)
+exports.addParticipant = async (req, res) => {
+  try {
+    const { eventId } = req.body;  // Assuming you're passing event ID in the body
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    // Check if the user is already registered (optional, you can remove this if not needed)
+    if (event.participants.includes(req.user.id)) {
+      return res.status(400).json({ message: 'You are already registered for this event' });
+    }
+
+    event.participants.push(req.user.id); // Add the user to the participants list
     await event.save();
-    res.status(200).json({ message: "Event updated successfully", event });
+
+    res.status(200).json({ message: 'Successfully registered for the event', event });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: 'Error registering for event', error });
   }
 };
-
-/**
- * Delete an event.
- * Only admins can delete events.
- */
-const deleteEvent = async (req, res) => {
-  try {
-    const event = await Event.findById(req.params.id);
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-    if (event.ngoId.toString() !== req.user.ngoId.toString()) {
-      return res.status(403).json({ message: "Access denied: Event does not belong to your NGO" });
-    }
-    await Event.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: "Event deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
-
-module.exports = { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent };
